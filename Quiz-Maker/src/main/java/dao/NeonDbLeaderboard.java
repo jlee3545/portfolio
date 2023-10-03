@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class NeonDbLeaderboard implements Leaderboard {
      * Example:
      * private final String NEON_CONNECTION_STRING = postgres://dencee:zzzzyyyyaaaabbbb@ep-aged-forest-55306244.us-west-2.aws.neon.tech/neondb
      */
-    private final String NEON_CONNECTION_STRING = "";
+    private final String NEON_CONNECTION_STRING = "postgres://jlee3545:EdmFC8guaJ3k@ep-winter-sun-07783447.us-east-2.aws.neon.tech/neondb";
 
     private JdbcTemplate template;
 
@@ -29,7 +30,7 @@ public class NeonDbLeaderboard implements Leaderboard {
     public List<Player> getLeaderboard(){
         List<Player> leaderboard = new ArrayList<>();
 
-        String sql = "SELECT player_name, score " +
+        String sql = "SELECT player_name, score, date " +
                      "FROM leaderboard " +
                      "ORDER BY score DESC, player_name " +
                      "LIMIT 10;";
@@ -39,7 +40,7 @@ public class NeonDbLeaderboard implements Leaderboard {
         while(results.next()){
             String name = results.getString("player_name");
             int score = results.getInt("score");
-
+            LocalDate date = results.getDate("date").toLocalDate();
             leaderboard.add(new Player(name, score));
         }
 

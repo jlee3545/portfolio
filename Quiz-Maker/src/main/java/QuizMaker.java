@@ -34,9 +34,9 @@ public class QuizMaker {
 
         displayLeaderboard();
 
-        List<QuizQuestion> quizQuestions = loadQuiz();
+//        List<QuizQuestion> quizQuestions = loadQuiz();
 
-        int numberCorrect = askQuizQuestions(quizQuestions);
+        int numberCorrect = askQuizQuestions();
 
         if( numberCorrect > 0){
             askAddLeaderboard(numberCorrect);
@@ -45,16 +45,55 @@ public class QuizMaker {
 
     /**
      * Ask all passed in questions
-     * @param quizQuestions
+     * @param
      * @return number of correct responses
      */
-    private int askQuizQuestions(List<QuizQuestion> quizQuestions){
+    private int askQuizQuestions() {
 
-        //
-        // === YOUR MAGIC CODE HERE! ===
-        //
+//        System.out.println("Enter the fully qualified name of the file to read in for quiz questions");
+//        String fileNameInput = userInput.nextLine();
+//
+//        File file = new File(fileNameInput);
+        int correct = 0;
+        int questionsAsked = 0;
 
-        return 0;
+        try {
+            Scanner fileScanner = new Scanner(quizFileObject);
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                String[] answers = line.split("\\|");
+                String question = answers[0];
+                questionsAsked++;
+                System.out.println(question);
+                System.out.println("1) " + answers[1].replace("*", ""));
+                System.out.println("2) " + answers[2].replace("*", ""));
+                System.out.println("3) " + answers[3].replace("*", ""));
+                System.out.println("4) " + answers[4].replace("*", ""));
+                System.out.println();
+                System.out.println("Type a number to choose your answer:");
+                Scanner answerInput = new Scanner(System.in);
+                String numberInput = answerInput.nextLine();
+                int number = Integer.parseInt(String.valueOf(numberInput));
+                if (answers[number].contains("*")) {
+                    System.out.println("Your answer: " + number);
+                    System.out.println("Correct!");
+                    System.out.println();
+                    correct++;
+                } else {
+                    System.out.println("Your answer: " + number);
+                    System.out.println("Wrong :(");
+                    System.out.println();
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            System.err.println("File not working");
+        } catch (NumberFormatException e) {
+            System.out.println("Number not correct format");
+        }
+        System.out.println("You got " + correct + " answer(s) correct out of the " + questionsAsked + " questions asked.");
+
+        return correct;
     }
 
     /**
